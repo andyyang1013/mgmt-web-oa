@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yxy.oa.mapper.SysUserMapper">
+
+    <resultMap id="customResultMap" type="com.yxy.oa.entity.SysUser">
+        <result property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="pwd"/>
+        <result property="salt" column="salt"/>
+        <result property="disabled" column="disabled"/>
+        <result property="systemType" column="system_type"/>
+        <result property="locked" column="locked"/>
+        <result property="description" column="description"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUid" column="create_uid"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUid" column="update_uid"/>
+    </resultMap>
+
+    <sql id="columns">
+		id,
+		account,
+		pwd,
+		salt,
+		disabled,
+		system_type,
+		locked,
+		description,
+		last_login_time,
+		create_time,
+		create_uid,
+		update_time,
+		update_uid
+	</sql>
+
+    <select id="selectListExclude" parameterType="com.yxy.oa.entity.SysUser" resultMap="customResultMap">
+		SELECT id,
+			account,
+			disabled,
+			system_type,
+			description,
+			last_login_time,
+			create_time,
+			create_uid,
+			update_time,
+			update_uid
+		FROM t_sys_user u
+		ORDER BY create_time DESC
+	</select>
+
+    <!--查询列表，可以传分页参数-->
+    <select id="findUserByRoleId" parameterType="com.yxy.oa.vo.SysUserVo" resultMap="customResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM t_sys_user u
+        where EXISTS (select 1 from t_sys_user_role ur where ur.role_id = #{roleId} and ur.user_id = u.id)
+    </select>
+
+    <select id="selectUserRoles" parameterType="com.yxy.oa.entity.SysUser" resultType="com.yxy.oa.entity.SysUserRole">
+		SELECT id,
+			   user_id userId,
+			   role_id roleId,
+			   create_time createTime,
+			   create_uid createUid,
+			   update_time updateTime,
+			   update_uid updateUid
+		  FROM t_sys_user_role
+		  WHERE user_id = #{id}
+	</select>
+
+    <!--插入角色和权限的关系表-->
+    <insert id="insertRoleRelation" parameterType="com.yxy.oa.entity.SysUserRole">
+		INSERT INTO t_sys_user_role (id ,user_id ,role_id ,create_time ,create_uid ,update_time ,update_uid)
+		VALUES
+		(#{id} ,#{userId} ,#{roleId} ,#{createTime} ,#{createUid} ,#{updateTime} ,#{updateUid})
+	</insert>
+
+    <select id="getByAccount" parameterType="java.lang.String" resultMap="customResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM t_sys_user u
+        WHERE
+        account = #{account}
+    </select>
+
+
+    <delete id="deleteRoleRelationsByUserId" parameterType="java.lang.Long">
+		DELETE FROM t_sys_user_role WHERE user_id = #{userId}
+	</delete>
+
+    <delete id="deleteUsersByRoleId" parameterType="java.lang.Long">
+		DELETE FROM t_sys_user WHERE id in (select user_id FROM t_sys_user_role WHERE role_id = #{roleId})
+	</delete>
+</mapper>
+
