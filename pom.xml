@@ -11,14 +11,15 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.yxy.mgmt</groupId>
-    <artifactId>mgmt-web-oa</artifactId>
+    <groupId>com.yxy</groupId>
+    <artifactId>oa</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>1.8
+        </java.version>
         <pagehelper.spring.version>1.1.1</pagehelper.spring.version>
         <mybatis.spring.version>1.3.0</mybatis.spring.version>
         <mybatis-plus.version>2.1.9</mybatis-plus.version>
@@ -28,30 +29,28 @@
         <shiro.version>1.3.2</shiro.version>
         <lombok.version>1.16.18</lombok.version>
         <lang3.version>3.1</lang3.version>
-        <okhttp.version>3.9.1</okhttp.version>
-        <mail.version>1.4.7</mail.version>
-        <activation.version>1.1.1</activation.version>
-        <disruptor.version>3.3.7</disruptor.version>
-        <kafka-clients.version>1.0.0</kafka-clients.version>
         <pinyin4j.version>2.5.1</pinyin4j.version>
-        <commons-codec.version>1.11</commons-codec.version>
         <springfox-swagger2.version>2.7.0</springfox-swagger2.version>
         <minio.version>4.0.1</minio.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- mysql依赖 -->
+            <!-- 数据库connector -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+
+            <!-- 数据库连接池 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
+
+            <!-- 数据库持久层 -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -67,13 +66,15 @@
                 <artifactId>mybatis-plus</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!-- fastjson -->
+
+            <!-- 序列化与反序列化 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-            <!-- shiro -->
+
+            <!-- 权限控制 -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-core</artifactId>
@@ -94,80 +95,66 @@
                 <artifactId>shiro-ehcache</artifactId>
                 <version>${shiro.version}</version>
             </dependency>
-            <!-- http客户端 -->
-            <!--<dependency>-->
-                <!--<groupId>com.squareup.okhttp3</groupId>-->
-                <!--<artifactId>okhttp</artifactId>-->
-                <!--<version>${okhttp.version}</version>-->
-            <!--</dependency>-->
+
             <!-- 注解的方式生成get set等 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
+
             <!-- 基本操作库 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>commons-codec</groupId>-->
-                <!--<artifactId>commons-codec</artifactId>-->
-                <!--<version>${commons-codec.version}</version>-->
-            <!--</dependency>-->
-            <!-- mail -->
-            <!--<dependency>-->
-                <!--<groupId>javax.mail</groupId>-->
-                <!--<artifactId>mail</artifactId>-->
-                <!--<version>${mail.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>javax.activation</groupId>-->
-                <!--<artifactId>activation</artifactId>-->
-                <!--<version>${activation.version}</version>-->
-            <!--</dependency>-->
-            <!-- 生成api文档 -->
-            <!--<dependency>-->
-                <!--<groupId>io.springfox</groupId>-->
-                <!--<artifactId>springfox-swagger-ui</artifactId>-->
-                <!--<version>${springfox-swagger2.version}</version>-->
-            <!--</dependency>-->
+
+            <!-- 接口文档 -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${springfox-swagger2.version}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>com.lmax</groupId>-->
-                <!--<artifactId>disruptor</artifactId>-->
-                <!--<version>${disruptor.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.kafka</groupId>-->
-                <!--<artifactId>kafka-clients</artifactId>-->
-                <!--<version>${kafka-clients.version}</version>-->
-            <!--</dependency>-->
+
             <!-- 中文拼音 -->
             <dependency>
                 <groupId>com.belerweb</groupId>
                 <artifactId>pinyin4j</artifactId>
                 <version>${pinyin4j.version}</version>
             </dependency>
+
+            <!-- excel操作 -->
             <dependency>
                 <groupId>net.sf.jxls</groupId>
                 <artifactId>jxls-core</artifactId>
                 <version>1.0.5</version>
             </dependency>
+
+            <!-- 文件上传下载 -->
             <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
+
+            <!-- activiti -->
+            <!--<dependency>-->
+                <!--<groupId>org.activiti</groupId>-->
+                <!--<artifactId>activiti-spring-boot-starter-basic</artifactId>-->
+                <!--<version>${activiti.version}</version>-->
+            <!--</dependency>-->
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <!-- web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 日志 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -179,12 +166,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
         <!-- 测试 -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -195,63 +182,31 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-autoconfigure</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-aop</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-context-support</artifactId>-->
-        <!--</dependency>-->
-        <!--web应用基本环境配置 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!--日志依赖包 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <!--监控基本环境配置 -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
-        <!--</dependency>-->
-        <!-- redis依赖 -->
+
+        <!-- 缓存 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.github.pagehelper</groupId>-->
-            <!--<artifactId>pagehelper-spring-boot-starter</artifactId>-->
-        <!--</dependency>-->
-        <!-- mysql依赖 -->
+
+        <!-- 数据库connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
+        <!-- 数据库数据源 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.spring.boot</groupId>-->
-            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-        <!--</dependency>-->
+
+        <!-- 数据库分页 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
@@ -278,11 +233,6 @@
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
         </dependency>
-        <!-- http客户端 -->
-        <!--<dependency>-->
-            <!--<groupId>com.squareup.okhttp3</groupId>-->
-            <!--<artifactId>okhttp</artifactId>-->
-        <!--</dependency>-->
         <!-- 注解的方式生成get set等 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -292,53 +242,34 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>commons-codec</groupId>-->
-            <!--<artifactId>commons-codec</artifactId>-->
-        <!--</dependency>-->
-        <!-- mail -->
-        <!--<dependency>-->
-            <!--<groupId>javax.mail</groupId>-->
-            <!--<artifactId>mail</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>javax.activation</groupId>-->
-            <!--<artifactId>activation</artifactId>-->
-        <!--</dependency>-->
-
-        <!-- 生成api文档 -->
-        <!--<dependency>-->
-            <!--<groupId>io.springfox</groupId>-->
-            <!--<artifactId>springfox-swagger-ui</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.lmax</groupId>-->
-            <!--<artifactId>disruptor</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.kafka</groupId>-->
-            <!--<artifactId>kafka-clients</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
         </dependency>
-
         <dependency>
             <groupId>net.sf.jxls</groupId>
             <artifactId>jxls-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
+        </dependency>
+
+        <!-- activiti -->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter-basic</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.183</version>
         </dependency>
 
     </dependencies>
