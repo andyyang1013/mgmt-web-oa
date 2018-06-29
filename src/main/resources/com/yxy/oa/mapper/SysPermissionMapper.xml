@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.yxy.oa.mapper.SysPermissionMapper">
+
+
+    <resultMap id="customResultMap" type="com.yxy.oa.entity.SysPermission">
+        <result property="id" column="id"/>
+        <result property="disabled" column="disabled"/>
+        <result property="resourceCode" column="resource_code"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="resourceType" column="resource_type"/>
+        <result property="url" column="url"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUid" column="create_uid"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUid" column="update_uid"/>
+		<result property="icon" column="icon"/>
+		<result property="path" column="path"/>
+		<result property="component" column="component"/>
+		<result property="redirect" column="redirect"/>
+    </resultMap>
+
+    <sql id="columns">
+		id,
+		disabled,
+		resource_code,
+		name,
+		parent_id,
+		resource_type,
+		url,
+		create_time,
+		create_uid,
+		update_time,
+		update_uid,
+		icon,
+		path,
+		component,
+		redirect
+	</sql>
+
+
+    <!--查询列表，可以传分页参数-->
+    <select id="getList" parameterType="com.yxy.oa.entity.SysPermission" resultMap="customResultMap">
+		SELECT
+		sp.id,
+		sp.disabled,
+		sp.resource_code,
+		sp.name,
+		sp.parent_id,
+		sp.resource_type,
+		sp.url,
+		sp.create_time,
+		sp.create_uid,
+		sp.update_time,
+		sp.update_uid,
+		(select count(*) from t_sys_permission p where p.parent_id = sp.id) childCount,
+		icon,
+		path,
+		component,
+		redirect
+		FROM t_sys_permission sp
+		<where>
+			<if test="resourceType != null">
+				and sp.resource_type = #{resourceType}
+			</if>
+			<if test="component != null and component != ''">
+				and sp.component != ''
+			</if>
+		</where>
+	</select>
+
+    <!--根据角色Id查询权限列表-->
+    <select id="getPermissionsByRoleId" parameterType="java.lang.Long" resultMap="customResultMap">
+		SELECT
+		sp.id,
+		sp.disabled,
+		sp.resource_code,
+		sp.name,
+		sp.parent_id,
+		sp.resource_type,
+		sp.url,
+		sp.create_time,
+		sp.create_uid,
+		sp.update_time,
+		sp.update_uid,
+		(select count(*) from t_sys_permission p where p.parent_id = sp.id) childCount,
+		icon,
+		path,
+		component,
+		redirect
+		FROM t_sys_permission sp WHERE sp.id IN (SELECT rp.permission_id FROM t_sys_role_permission rp WHERE rp.role_id = #{roleId})
+		and sp.disabled = 0
+		order by update_time desc
+	</select>
+
+    <!--根据用户Id查询资源，只查询资源编码-->
+    <select id="getPermissionsByUserId" parameterType="java.lang.Long" resultMap="customResultMap">
+		SELECT
+			sp.id,
+			sp.resource_code,
+			sp.name,
+			sp.parent_id,
+			sp.resource_type,
+			sp.url
+		FROM t_sys_permission sp
+		INNER JOIN t_sys_role_permission rp ON sp.id = rp.permission_id
+		INNER JOIN t_sys_user_role ur ON ur.role_id = rp.role_id
+		INNER JOIN t_sys_role sr ON sr.id = rp.role_id
+		WHERE sp.disabled = 0
+		AND sr.disabled = 0
+		AND ur.user_id = #{userId}
+		ORDER BY sp.id
+	</select>
+
+	<!--根据用户Id查询资源，只查询资源ID-->
+	<select id="getUserPermissionIds" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT
+		sp.resource_code
+		FROM t_sys_permission sp
+		INNER JOIN t_sys_role_permission rp ON sp.id = rp.permission_id
+		INNER JOIN t_sys_user_role ur ON ur.role_id = rp.role_id
+		INNER JOIN t_sys_role sr ON sr.id = rp.role_id
+		WHERE sp.disabled = 0
+		AND sr.disabled = 0
+		AND ur.user_id = #{userId}
+	</select>
+
+
+	<select id="selectAllMenusTree" resultType="com.yxy.oa.entity.RoleMenuBean">
+		select id, parent_id as parentId, name as label from t_sys_permission where disabled = 0 and id != 21
+	</select>
+</mapper>
+
