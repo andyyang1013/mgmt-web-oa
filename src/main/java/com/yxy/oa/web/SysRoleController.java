@@ -117,7 +117,11 @@ public class SysRoleController extends BaseController {
             throw new BizException(CodeMsg.record_not_exist);
         }
         //判断是否为超级管理员
-        if (dbSysRole.getSystemType() != 1) {
+        if (dbSysRole.getSystemType() == 1) {
+            throw new BizException(CodeMsg.user_no_permission);
+        }
+        //判断只能是超级管理员才能修改角色
+        if (getCurUserEntity().getSystemType() != 1) {
             throw new BizException(CodeMsg.user_no_permission);
         }
         if (!dbSysRole.getRoleName().equals(sysRole.getRoleName()) && sysRoleService.existRoleName(sysRole.getRoleName())) {
@@ -135,7 +139,7 @@ public class SysRoleController extends BaseController {
         dbSysRole.setPermissionIds(sysRole.getPermissionIds());
         sysRoleService.updateRole(dbSysRole);
         //权限发生改变时更新当前登录用户权限缓存
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 
@@ -154,8 +158,8 @@ public class SysRoleController extends BaseController {
         if (dbSysRole == null || StringUtils.isEmpty(dbSysRole.getId())) {
             throw new BizException(CodeMsg.record_not_exist);
         }
-        //判断是否为超级管理员
-        if (dbSysRole.getSystemType() == 1) {
+        //判断只能是超级管理员才能修改角色
+        if (getCurUserEntity().getSystemType() != 1) {
             throw new BizException(CodeMsg.user_no_permission);
         }
         dbSysRole.setDisabled(disabled);
@@ -163,7 +167,7 @@ public class SysRoleController extends BaseController {
         dbSysRole.setUpdateTime(Toolkit.getCurDate());
         sysRoleService.updateById(dbSysRole);
         //权限发生改变时更新当前登录用户权限缓存
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 
@@ -202,13 +206,13 @@ public class SysRoleController extends BaseController {
         if (sysRole == null) {
             throw new BizException(CodeMsg.resource_not_found);
         }
-        //判断是否为超级管理员
-        if (sysRole.getSystemType() == 1) {
+        //判断只能是超级管理员才能修改角色
+        if (getCurUserEntity().getSystemType() != 1) {
             throw new BizException(CodeMsg.user_no_permission);
         }
         sysRoleService.deleteByRole(sysRole);
         //权限发生改变时更新当前登录用户权限缓存
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 
@@ -229,7 +233,7 @@ public class SysRoleController extends BaseController {
      * @return
      */
     @RequestMapping("/getPermIdsByRoleId")
-    @ApiOperation(value = "根据角色ID查询权限ID集合", notes = "根据角色ID查询权限ID集合", httpMethod = "POST", response = List.class)
+    @ApiOperation(value = "根据角色ID查询按钮权限ID集合", notes = "根据角色ID查询按钮权限ID集合", httpMethod = "POST", response = List.class)
     public List<Long> getPermissionIdsByRoleId(Long roleId) {
         return sysRoleService.getPermissionIdsByRoleId(roleId);
     }

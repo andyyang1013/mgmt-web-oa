@@ -70,7 +70,9 @@
 	</select>
 
 	<select id="getPermissionIdsByRoleId" resultType="java.lang.Long">
-		select permission_id from t_sys_role_permission where role_id = #{roleId}
+		select permission_id from t_sys_role_permission rp
+		left join t_sys_permission p on rp.permission_id = p.id
+		where p.resource_type = 2 and rp.role_id =  #{roleId}
 	</select>
 </mapper>
 
