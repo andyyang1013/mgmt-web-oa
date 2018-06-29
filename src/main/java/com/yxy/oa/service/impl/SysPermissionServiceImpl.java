@@ -79,12 +79,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         iRedisRepository.set(redisKey, user, Constant.USER_TOKEN_EXPIRE, TimeUnit.SECONDS);
         UserReqContextUtil.setRequestUser((SysUser) object);
         UserReqContextUtil.setToken(token);
-//            PlatformAuthenticationToken userToken = new PlatformAuthenticationToken((SysUser) object,token);
-//            try {
-//                SecurityUtils.getSubject().login(userToken);
-//            } catch (AuthenticationException e) {
-//                /**就直接返回给请求者.*/
-//            }
     }
 
     @Override
@@ -114,7 +108,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                 returnPermissions.add(permission);
             }
         }
-
         for (SysPermission returnPermission : returnPermissions) {
             setChild(returnPermission, permissions);
         }
