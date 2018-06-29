@@ -9,6 +9,7 @@ import com.yxy.oa.repository.IRedisRepository;
 import com.yxy.oa.util.CookieUtil;
 import com.yxy.oa.util.JacksonUtil;
 import com.yxy.oa.vo.ResponseT;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.PathMatchingFilter;
@@ -67,7 +68,12 @@ public class PlatformAccessControlFilter extends PathMatchingFilter {
         if (isUnAuthUrl(request)) {
             return true;
         }
-        String userToken = CookieUtil.getCookieValue((HttpServletRequest) request, Constant.USER_TOKEN);
+        // 前端预请求不拦截
+        String requsetMethod = ((HttpServletRequest) request).getMethod();
+        if ("OPTIONS".equals(requsetMethod)){
+            return true;
+        }
+        String userToken =((HttpServletRequest) request).getHeader(Constant.USER_TOKEN);
         if (userToken == null) {
             /**后台没有获取到用户令牌时，清空用户登录状态*/
             UserReqContextUtil.set(null);
@@ -88,20 +94,20 @@ public class PlatformAccessControlFilter extends PathMatchingFilter {
             /**刷新token有效期【redis,cookie】*/
             iRedisRepository.expire(redisKey, Constant.USER_TOKEN_EXPIRE, TimeUnit.SECONDS);
             CookieUtil.add((HttpServletResponse) response, Constant.USER_TOKEN, userToken, Constant.USER_TOKEN_EXPIRE);
-
-            /**记录登录状态*/
-            UserReqContextUtil.setRequestUser((SysUser) object);
-            UserReqContextUtil.setToken(userToken);
-
-            logger.info("登录拦截器：userId=" + UserReqContextUtil.getRequestUserId() + ",loginId=" + UserReqContextUtil.getRequestUser().getAccount());
-            PlatformAuthenticationToken token = new PlatformAuthenticationToken((SysUser) object, userToken);
-            try {
-                SecurityUtils.getSubject().login(token);
-            } catch (AuthenticationException e) {
-                onLoginFail(response, CodeMsg.user_no_permission);
-                /**就直接返回给请求者.*/
-                return false;
-            }
+//
+//            /**记录登录状态*/
+//            UserReqContextUtil.setRequestUser((SysUser) object);
+//            UserReqContextUtil.setToken(userToken);
+//
+//            logger.info("登录拦截器：userId=" + UserReqContextUtil.getRequestUserId() + ",loginId=" + UserReqContextUtil.getRequestUser().getAccount());
+//            PlatformAuthenticationToken token = new PlatformAuthenticationToken((SysUser) object, userToken);
+//            try {
+//                SecurityUtils.getSubject().login(token);
+//            } catch (AuthenticationException e) {
+//                onLoginFail(response, CodeMsg.user_no_permission);
+//                /**就直接返回给请求者.*/
+//                return false;
+//            }
             return true;
         }
     }

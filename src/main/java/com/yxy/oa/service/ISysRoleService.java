@@ -16,17 +16,15 @@ public interface ISysRoleService extends IService<SysRole> {
      * 新增系统角色,批量插入角色和权限的关系表
      *
      * @param sysRole
-     * @param permissions
      */
-    void insert(SysRole sysRole, String permissions);
+    void insertRole(SysRole sysRole);
 
     /**
      * 修改系统角色,批量修改角色和权限的关系表
      *
      * @param sysRole
-     * @param permissions
      */
-    void update(SysRole sysRole, String permissions);
+    void updateRole(SysRole sysRole);
 
     /**
      * 根据用户Id查询系统角色
@@ -51,4 +49,10 @@ public interface ISysRoleService extends IService<SysRole> {
      * @return
      */
     boolean existRoleName(String roleName);
+
+    /**
+     * 查询角色对应的所有权限ID
+     * @param roleId
+     * */
+    List<Long> getPermissionIdsByRoleId(Long roleId);
 }

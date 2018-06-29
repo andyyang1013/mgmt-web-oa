@@ -69,6 +69,12 @@ public class SysRole extends Model<SysRole> {
 
     private transient List<SysPermission> permissions;
 
+    private transient List<Long> permissionIds;
+
+    // 当前页码
+    private transient int page;
+    // 每页条数
+    private transient int limit;
 
     @Override
     protected Serializable pkVal() {

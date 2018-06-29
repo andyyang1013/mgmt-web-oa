@@ -2,7 +2,9 @@ package com.yxy.oa.util;/**
  * Created by dell on 2017/11/13.
  */
 
+import com.yxy.oa.OaAdminApplication;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.SpringApplication;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
@@ -153,4 +155,9 @@ public class Toolkit {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
+    public static void main(String[] args) {
+        String salt = generateSalt();
+        String password = encrypt("123456",salt);
+        System.out.println("salt==" + salt + "password==" + password);
+    }
 }

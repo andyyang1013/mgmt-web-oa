@@ -38,5 +38,8 @@ public class Constant {
      */
     public static final int USER_TOKEN_EXPIRE = 60 * 60 * 2;
 
-
+    /**
+     * 系统管理权限父Id
+     * */
+    public static final int SYS_PERMISSION_ID = 20;
 }

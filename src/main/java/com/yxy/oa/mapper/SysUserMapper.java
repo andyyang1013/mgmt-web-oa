@@ -19,7 +19,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param entry
      * @return List<SysUser>
      */
-    List<SysUser> findUserByRoleId(SysUserVo entry);
+    List<SysUser> queryUserList(SysUserVo entry);
 
     /**
      * 新增用户和角色关系表

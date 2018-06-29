@@ -19,7 +19,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @param entry
      * @return List<SysUser>
      */
-    List<SysUser> findUserByRoleId(SysUserVo entry);
+    List<SysUser> queryUserList(SysUserVo entry);
 
     /**
      * 新增用户和角色关系表
@@ -53,11 +53,9 @@ public interface ISysUserService extends IService<SysUser> {
 
     /**
      * 插入用户和用户角色关系
-     *
      * @param sysUser
-     * @param roleId
      */
-    public void insert(SysUser sysUser, Long[] roleId);
+    void insertSysUser(SysUser sysUser);
 
 
     /**
@@ -72,9 +70,8 @@ public interface ISysUserService extends IService<SysUser> {
      * 修改用户及用户角色
      *
      * @param dbSysUser
-     * @param roleIds
      */
-    void updateUser(SysUser dbSysUser, Long[] roleIds);
+    void updateUser(SysUser dbSysUser);
 
     /**
      * 删除用户

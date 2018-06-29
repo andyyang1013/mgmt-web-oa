@@ -14,4 +14,9 @@ public class SysUserVo extends SysUser {
      */
     private Long roleId;
 
+    // 当前页码
+    private int page;
+    // 每页条数
+    private int limit;
+
 }

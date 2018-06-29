@@ -3,6 +3,7 @@ package com.yxy.oa.web;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yxy.oa.entity.RoleMenuBean;
 import com.yxy.oa.entity.SysPermission;
 import com.yxy.oa.exception.BizException;
 import com.yxy.oa.exception.CodeMsg;
@@ -18,7 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 系统权限资源表 前端控制器
@@ -95,7 +98,7 @@ public class SysPermissionController extends BaseController {
         }
         dbSysPermission.setDisabled(sysPermission.getDisabled());
         dbSysPermission.setResourceCode(sysPermission.getResourceCode());
-        dbSysPermission.setResourceName(sysPermission.getResourceName());
+        dbSysPermission.setName(sysPermission.getName());
         dbSysPermission.setParentId(sysPermission.getParentId());
         dbSysPermission.setResourceType(sysPermission.getResourceType());
         dbSysPermission.setUrl(sysPermission.getUrl());
@@ -138,4 +141,23 @@ public class SysPermissionController extends BaseController {
         return SUCCESS;
     }
 
+    @RequestMapping("/menusList")
+    @ApiOperation(value = "获取用户登录后的侧边栏菜单元素与元素权限", notes = "根据当前登录用户ID获取菜单元素", httpMethod = "POST", response = String.class)
+    public Map<String,Object> selectAllMenus() {
+        List<SysPermission> menuList = sysPermissionService.getTreeList();
+        List<String> permissions = sysPermissionService.getUserPermissionPerms(getCurUserId());
+        Map<String, Object> map = new HashMap();
+        map.put("menuList",menuList);
+        map.put("permissions",permissions);
+        return map;
+    }
+
+    /**
+     * 获取角色权限的授权菜单树
+     */
+    @RequestMapping("/treeList")
+    public List<RoleMenuBean> selectAllMenusTree() {
+        List<RoleMenuBean> treeList = sysPermissionService.selectAllMenusTree();
+        return treeList;
+    }
 }

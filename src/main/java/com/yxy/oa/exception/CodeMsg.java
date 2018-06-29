@@ -16,7 +16,7 @@ public enum CodeMsg {
 
     //业务异常
     id_param_blank("参数id不能为空", "biz_001"),
-    account_password_error("用户名或者密码出错", "biz_002"),
+    account_password_error("用户名或密码出错", "biz_002"),
     param_note_blank("参数不能为空", "biz_003"),
     record_not_exist("记录数据不存在", "biz_004"),
     token_not_blank("token不能为空", "biz_005"),

@@ -50,4 +50,10 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * @return
      */
     SysRole selectByRoleName(@Param("roleName") String roleName);
+
+    /**
+     * 查询角色对应的所有权限ID
+     * @param roleId
+     * */
+    List<Long> getPermissionIdsByRoleId(@Param("roleId") Long roleId);
 }

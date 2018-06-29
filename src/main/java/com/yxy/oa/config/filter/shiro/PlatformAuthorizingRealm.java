@@ -3,41 +3,73 @@ package com.yxy.oa.config.filter.shiro;
 import com.yxy.oa.entity.SysPermission;
 import com.yxy.oa.entity.SysRole;
 import com.yxy.oa.entity.SysUser;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.yxy.oa.exception.CodeMsg;
+import com.yxy.oa.mapper.SysPermissionMapper;
+import com.yxy.oa.mapper.SysRoleMapper;
+import com.yxy.oa.mapper.SysUserMapper;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Component
 public class PlatformAuthorizingRealm extends AuthorizingRealm {
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
     /**
      * PlatformAuthenticationToken 类型的Token，
      */
-    @Override
-    public boolean supports(AuthenticationToken token) {
-        return token instanceof PlatformAuthenticationToken;
-    }
+//    @Override
+//    public boolean supports(AuthenticationToken token) {
+//        return token instanceof PlatformAuthenticationToken;
+//    }
 
     /**
      * 身份验证，做了一个假的身份认证
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        PlatformAuthenticationToken authenticationToken = (PlatformAuthenticationToken) token;
-        //这里做了个假的登录认证，直接拿客户端传递过来的token去比较，所以一定是登录成功的了
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                authenticationToken.getPrincipal(),
-                authenticationToken.getCredentials(),
-                getName());
-        return authenticationInfo;
+        String account = (String) token.getPrincipal();
+        String password = new String((char[]) token.getCredentials());
+
+        // 查询用户信息
+        SysUser query = new SysUser();
+        query.setAccount(account);
+        SysUser loginUser = sysUserMapper.selectOne(query);
+        // 账号不存在
+        if (loginUser == null) {
+            throw new UnknownAccountException(CodeMsg.account_password_error.getMsg());
+        }
+        // 密码错误
+        if (!password.equals(loginUser.getPassword())) {
+            throw new UnknownAccountException(CodeMsg.account_password_error.getMsg());
+        }
+        // 账号锁定
+        if (loginUser.getDisabled() == 1) {
+            throw new LockedAccountException(CodeMsg.user_has_disabled.getMsg());
+        }
+        List<SysRole> roles = sysRoleMapper.getRolesByUserId(loginUser.getId());
+        for (SysRole role : roles) {
+            role.setPermissions(sysPermissionMapper.getPermissionsByRoleId(role.getId()));
+        }
+        loginUser.setRoles(roles);
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(loginUser, password, getName());
+        return info;
     }
 
     /**

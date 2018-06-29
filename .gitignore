@@ -1,9 +1,0 @@
-target/
-.idea/
-spring-boot-example.iml
-/.settings/
-/bin/
-/.classpath
-/.project
-logs/
-**.iml

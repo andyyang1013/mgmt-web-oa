@@ -72,7 +72,7 @@ public class SysRoleController extends BaseController {
      * @return
      */
     @RequestMapping("/listNoPage")
-    @ApiOperation(value = "查询系统角色列表", notes = "根据条件查询系统角色列表", httpMethod = "POST", response = List.class)
+    @ApiOperation(value = "查询系统角色列表", notes = "根据条件查询系统角色列表", httpMethod = "POST", response = PageInfo.class)
     public List<SysRole> getListNoPage(@RequestBody SysRole sysRole) {
         return sysRoleService.selectList(new EntityWrapper<>(sysRole));
     }

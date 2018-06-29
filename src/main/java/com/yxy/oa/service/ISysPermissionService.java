@@ -1,6 +1,7 @@
 package com.yxy.oa.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.yxy.oa.entity.RoleMenuBean;
 import com.yxy.oa.entity.SysPermission;
 
 import java.util.List;
@@ -43,9 +44,16 @@ public interface ISysPermissionService extends IService<SysPermission> {
 
     /**
      * 校验所有id是有父id存在或自己就是父id
-     *
      * @param permissionIds
      * @return
      */
-    boolean existParentId(String permissionIds);
+    boolean existParentId(List<Long> permissionIds);
+
+    List<String> getUserPermissionPerms(Long userId);
+
+    /**
+     * 获取角色权限的授权菜单树
+     * @return
+     */
+    List<RoleMenuBean> selectAllMenusTree();
 }

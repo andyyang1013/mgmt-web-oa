@@ -2,7 +2,9 @@ package com.yxy.oa.web;
 
 import com.yxy.oa.config.convert.DateEditor;
 import com.yxy.oa.config.filter.UserReqContextUtil;
+import com.yxy.oa.entity.SysUser;
 import com.yxy.oa.repository.IRedisRepository;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +46,20 @@ public class BaseController {
         webDataBinder.registerCustomEditor(Date.class, new DateEditor(true));
     }
 
+    /**
+     * 获取当前用户
+     * @return
+     */
+    public static SysUser getCurUserEntity() {
+        return (SysUser) SecurityUtils.getSubject().getPrincipal();
+    }
 
     /**
      * 获取当前用户id
-     *
      * @return
      */
-    protected Long getCurUserId() {
-        return UserReqContextUtil.getRequestUserId();
+    protected static Long getCurUserId() {
+        return getCurUserEntity().getId();
     }
 
     /**

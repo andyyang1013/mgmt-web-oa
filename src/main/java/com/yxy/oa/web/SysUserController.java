@@ -1,6 +1,5 @@
 package com.yxy.oa.web;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yxy.oa.Constant;
@@ -24,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,9 +62,9 @@ public class SysUserController extends BaseController {
     @RequestMapping("/list")
     @ApiOperation(value = "查询系统用户列表", notes = "根据条件查询系统用户列表", httpMethod = "POST", response = PageInfo.class)
     @RequiresPermissions("sysUser:list")
-    public PageInfo<SysUser> getList(SysUserVo sysUser, Page page) {
-        PageHelper.startPage(page.getPageNum(), page.getPageSize(), true);
-        List<SysUser> list = sysUserService.selectList(new EntityWrapper<>(sysUser));
+    public PageInfo<SysUser> getList(@RequestBody SysUserVo sysUser) {
+        PageHelper.startPage(sysUser.getPage(), sysUser.getLimit());
+        List<SysUser> list = sysUserService.queryUserList(sysUser);
         PageInfo<SysUser> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
@@ -78,8 +78,8 @@ public class SysUserController extends BaseController {
     @RequestMapping("/insert")
     @ApiOperation(value = "新增系统用户", notes = "新增系统用户，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:insert")
-    public String insert(SysUser sysUser, Long[] roleIds) {
-        if (StringUtil.hasNull(sysUser.getAccount(), sysUser.getPassword(), roleIds)) {
+    public String insert(@RequestBody SysUser sysUser) {
+        if (StringUtil.hasNull(sysUser.getAccount(), sysUser.getPassword(), sysUser.getRoleIds())) {
             throw new BizException(CodeMsg.param_note_blank);
         }
         SysUser dbSysUser = sysUserService.getByAccount(sysUser.getAccount());
@@ -98,7 +98,7 @@ public class SysUserController extends BaseController {
         sysUser.setCreateTime(Toolkit.getCurDate());
         sysUser.setUpdateUid(getCurUserId());
         sysUser.setUpdateTime(Toolkit.getCurDate());
-        sysUserService.insert(sysUser, roleIds);
+        sysUserService.insertSysUser(sysUser);
         return SUCCESS;
     }
 
@@ -118,8 +118,8 @@ public class SysUserController extends BaseController {
     @RequestMapping("/update")
     @ApiOperation(value = "更新系统用户", notes = "更新系统用户，需要主键Id，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:update")
-    public String update(SysUser sysUser, Long[] roleIds) {
-        if (StringUtil.hasNull(roleIds, sysUser.getId())) {
+    public String update(@RequestBody SysUser sysUser) {
+        if (StringUtil.hasNull(sysUser.getRoleIds(), sysUser.getId())) {
             throw new BizException(CodeMsg.param_note_blank);
         }
         SysUser dbSysUser = sysUserService.selectById(sysUser.getId());
@@ -127,20 +127,22 @@ public class SysUserController extends BaseController {
             throw new BizException(CodeMsg.record_not_exist);
         }
         //判断是否为超级管理员
-        if (dbSysUser.getSystemType() == 1) {
+        if (dbSysUser.getSystemType() != 1) {
             throw new BizException(CodeMsg.user_no_permission);
         }
         dbSysUser.setDescription(sysUser.getDescription());
         dbSysUser.setUpdateUid(getCurUserId());
         dbSysUser.setUpdateTime(Toolkit.getCurDate());
-        sysUserService.updateUser(dbSysUser, roleIds);
+        dbSysUser.setRoleIds(sysUser.getRoleIds());
+        dbSysUser.setDisabled(sysUser.getDisabled());
+        sysUserService.updateUser(dbSysUser);
         //权限发生改变时更新当前登录用户权限缓存
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 
     /**
-     * 修改系统用户
+     * 修改系统用户密码
      *
      * @param id 系统用户对象
      */

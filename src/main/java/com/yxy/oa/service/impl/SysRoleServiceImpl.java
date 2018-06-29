@@ -6,7 +6,6 @@ import com.yxy.oa.entity.SysRole;
 import com.yxy.oa.entity.SysRolePermission;
 import com.yxy.oa.mapper.SysRoleMapper;
 import com.yxy.oa.service.ISysRoleService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +31,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insert(SysRole sysRole, String permissionIds) {
+    public void insertRole(SysRole sysRole) {
         sysRoleMapper.insert(sysRole);
         //增加角色和权限资源的关系
-        if (StringUtils.isNotEmpty(permissionIds)) {
-            List<SysRolePermission> sysRolePermissions = setSysRolePermissions(sysRole, permissionIds);
+        if (!sysRole.getPermissionIds().isEmpty()) {
+            List<SysRolePermission> sysRolePermissions = setSysRolePermissions(sysRole);
             if (!sysRolePermissions.isEmpty()) {
                 sysRoleMapper.insertPermRelations(sysRolePermissions);
             }
@@ -50,13 +49,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysRole sysRole, String permissionIds) {
+    public void updateRole(SysRole sysRole) {
         sysRoleMapper.updateById(sysRole);
         //增加角色和权限资源的关系
-        if (StringUtils.isNotEmpty(permissionIds)) {
+        if (!sysRole.getPermissionIds().isEmpty()) {
             //删除以前的role和权限关系
             sysRoleMapper.deletePermRelationsByRoleId(sysRole.getId());
-            List<SysRolePermission> sysRolePermissions = setSysRolePermissions(sysRole, permissionIds);
+            List<SysRolePermission> sysRolePermissions = setSysRolePermissions(sysRole);
             if (!sysRolePermissions.isEmpty()) {
                 sysRoleMapper.insertPermRelations(sysRolePermissions);
             }
@@ -83,14 +82,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return role != null;
     }
 
-    private List<SysRolePermission> setSysRolePermissions(SysRole sysRole, String permissionIds) {
+    private List<SysRolePermission> setSysRolePermissions(SysRole sysRole) {
         List<SysRolePermission> sysRolePermissions = new ArrayList<>();
-        String[] permArr = permissionIds.split(",");
-        for (String permStr : permArr) {
+        for (Long permissionIds : sysRole.getPermissionIds()) {
             SysRolePermission sysRolePermission = new SysRolePermission();
             sysRolePermission.setId(IdWorker.getId());
             sysRolePermission.setRoleId(sysRole.getId());
-            sysRolePermission.setPermissionId(Long.parseLong(permStr));
+            sysRolePermission.setPermissionId(permissionIds);
             sysRolePermission.setCreateUid(sysRole.getCreateUid());
             sysRolePermission.setCreateTime(sysRole.getCreateTime());
             sysRolePermission.setUpdateUid(sysRole.getId());
@@ -100,4 +98,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return sysRolePermissions;
     }
 
+    public List<Long> getPermissionIdsByRoleId(Long roleId) {
+        return sysRoleMapper.getPermissionIdsByRoleId(roleId);
+    }
 }

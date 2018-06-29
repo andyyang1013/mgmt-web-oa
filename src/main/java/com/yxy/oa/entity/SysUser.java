@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -88,6 +89,20 @@ public class SysUser extends Model<SysUser> {
      */
     private transient List<SysRole> roles;
 
+    /**
+     * 一个用户具有多个角色
+     */
+    private transient List<Long> roleIds;
+
+    /**
+     * 创建用户名
+     */
+    private transient String createUserName;
+
+    /**
+     * 更新用户名
+     */
+    private transient String updateUserName;
 
     @Override
     protected Serializable pkVal() {

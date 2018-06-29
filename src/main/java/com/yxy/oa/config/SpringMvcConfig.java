@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
@@ -59,6 +60,17 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
 //        super.addInterceptors(registry);
 //    }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+
+        registry.addMapping("/**")
+                .allowCredentials(true)
+                .allowedHeaders("*")
+                .allowedOrigins("*")
+                .allowedMethods("*");
+
+    }
+
     /**
      * 处理跨域问题
      */
@@ -69,10 +81,10 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
         config.setAllowCredentials(true);
         //允许域。若是所有：*
         config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:9529");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.yxy.oa.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.yxy.oa.entity.RoleMenuBean;
 import com.yxy.oa.entity.SysPermission;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,4 +37,17 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
      */
     List<SysPermission> getPermissionsByUserId(@Param("userId") Long userId);
 
+    /**
+     * 根据用户Id查询系统权限表ID
+     *
+     * @param userId
+     * @return List<SysPermission>
+     */
+    List<String> getUserPermissionIds(@Param("userId") Long userId);
+
+    /**
+     * 获取角色权限的授权菜单树数据
+     * @return
+     */
+    List<RoleMenuBean> selectAllMenusTree();
 }

@@ -2,15 +2,12 @@ package com.yxy.oa.config;
 
 import com.yxy.oa.config.filter.shiro.PlatformAccessControlFilter;
 import com.yxy.oa.config.filter.shiro.PlatformAuthorizingRealm;
-import com.yxy.oa.config.filter.shiro.PlatformSubjectFactory;
-import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
-import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -30,11 +27,10 @@ public class ShiroConfiguration {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(securityManager);
         factoryBean.getFilters().put("access", accesslFilter());
-        //拦截器.
+        // 拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         filterChainDefinitionMap.put("/**", "access");
         factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-
         return factoryBean;
     }
 
@@ -46,10 +42,10 @@ public class ShiroConfiguration {
      * @return
      */
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager securityManager() {
+    public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
-        securityManager.setSubjectFactory(subjectFactory());
+//        securityManager.setSubjectFactory(subjectFactory());
         securityManager.setSessionManager(sessionManager());
         securityManager.setRealm(statelessRealm());
 
@@ -57,21 +53,21 @@ public class ShiroConfiguration {
          * 禁用使用Sessions 作为存储策略的实现，但它没有完全地禁用Sessions
          * 所以需要配合context.setSessionCreationEnabled(false);
          */
-        ((DefaultSessionStorageEvaluator) ((DefaultSubjectDAO) securityManager.getSubjectDAO()).getSessionStorageEvaluator()).setSessionStorageEnabled(false);
+//        ((DefaultSessionStorageEvaluator) ((DefaultSubjectDAO) securityManager.getSubjectDAO()).getSessionStorageEvaluator()).setSessionStorageEnabled(false);
 
         return securityManager;
     }
 
-    /**
-     * subject工厂管理器.
-     *
-     * @return
-     */
-    @Bean
-    public DefaultWebSubjectFactory subjectFactory() {
-        PlatformSubjectFactory subjectFactory = new PlatformSubjectFactory();
-        return subjectFactory;
-    }
+//    /**
+//     * subject工厂管理器.
+//     *
+//     * @return
+//     */
+//    @Bean
+//    public DefaultWebSubjectFactory subjectFactory() {
+//        PlatformSubjectFactory subjectFactory = new PlatformSubjectFactory();
+//        return subjectFactory;
+//    }
 
     /**
      * session管理器：
@@ -82,8 +78,11 @@ public class ShiroConfiguration {
      */
     @Bean
     public DefaultSessionManager sessionManager() {
-        DefaultSessionManager sessionManager = new DefaultSessionManager();
-        sessionManager.setSessionValidationSchedulerEnabled(false);
+        ShiroSessionManager sessionManager = new ShiroSessionManager();
+        // 设置session过期时间为1小时(单位：毫秒)，默认为30分钟
+        sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
@@ -131,7 +130,10 @@ public class ShiroConfiguration {
         return authorizationAttributeSourceAdvisor;
     }
 
-
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
     /**
      * 自动代理所有的advisor:

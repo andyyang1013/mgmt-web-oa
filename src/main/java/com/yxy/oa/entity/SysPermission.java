@@ -34,8 +34,8 @@ public class SysPermission extends Model<SysPermission> {
     /**
      * 资源名称
      */
-    @TableField("resource_name")
-    private String resourceName;
+    @TableField("name")
+    private String name;
     /**
      * 资源父ID
      */
@@ -79,7 +79,31 @@ public class SysPermission extends Model<SysPermission> {
     /**
      * 子资源列表
      */
-    private transient List<SysPermission> childs;
+    private transient List<SysPermission> children;
+
+    /**
+     * 菜单图标
+     */
+    @TableField("icon")
+    private String icon;
+
+    /**
+     * 路由地址
+     */
+    @TableField("path")
+    private String path;
+
+    /**
+     * 组件
+     */
+    @TableField("component")
+    private String component;
+
+    /**
+     * 主路由跳转地址
+     */
+    @TableField("redirect")
+    private String redirect;
 
 
     @Override
