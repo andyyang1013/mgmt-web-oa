@@ -10,7 +10,6 @@ import com.yxy.oa.exception.CodeMsg;
 import com.yxy.oa.service.ISysPermissionService;
 import com.yxy.oa.service.ISysRoleService;
 import com.yxy.oa.service.ISysUserService;
-import com.yxy.oa.util.CookieUtil;
 import com.yxy.oa.util.StringUtil;
 import com.yxy.oa.util.Toolkit;
 import com.yxy.oa.vo.SysUserVo;
@@ -111,7 +110,7 @@ public class SysUserController extends BaseController {
             throw new BizException(CodeMsg.record_not_exist);
         }
         //判断是否为超级管理员
-        if (dbSysUser.getSystemType() != 1) {
+        if (dbSysUser.getSystemType() == 1) {
             throw new BizException(CodeMsg.user_no_permission);
         }
         dbSysUser.setDescription(sysUser.getDescription());
@@ -173,7 +172,7 @@ public class SysUserController extends BaseController {
         dbSysUser.setUpdateUid(getCurUserId());
         dbSysUser.setUpdateTime(Toolkit.getCurDate());
         sysUserService.updateById(dbSysUser);
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 

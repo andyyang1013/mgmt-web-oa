@@ -51,7 +51,7 @@ public interface ISysRoleService extends IService<SysRole> {
     boolean existRoleName(String roleName);
 
     /**
-     * 查询角色对应的所有权限ID
+     * 查询角色对应的所有按钮权限ID
      *
      * @param roleId
      */

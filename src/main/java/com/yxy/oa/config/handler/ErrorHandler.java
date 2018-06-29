@@ -4,6 +4,7 @@ import com.yxy.oa.exception.BizException;
 import com.yxy.oa.exception.CodeMsg;
 import com.yxy.oa.util.JacksonUtil;
 import com.yxy.oa.vo.ResponseT;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -66,6 +67,12 @@ public class ErrorHandler {
             resEntity.setCode(exceptionCode.getCode());
             resEntity.setMsg(exceptionCode.getMsg());
             resEntity.setData(null);
+        } else if (exception instanceof UnauthorizedException) {
+            exceptionCode = CodeMsg.user_no_permission;
+            resEntity.setCode(exceptionCode.getCode());
+            resEntity.setMsg(exceptionCode.getMsg());
+            resEntity.setData(null);
+            logger.error("权限不足：", exception);
         } else {
             exceptionCode = CodeMsg.system_error;
             resEntity.setCode(exceptionCode.getCode());

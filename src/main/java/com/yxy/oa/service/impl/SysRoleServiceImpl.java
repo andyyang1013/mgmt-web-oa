@@ -8,6 +8,7 @@ import com.yxy.oa.mapper.SysRoleMapper;
 import com.yxy.oa.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @param sysRole
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void insertRole(SysRole sysRole) {
         sysRoleMapper.insert(sysRole);
         //增加角色和权限资源的关系
@@ -48,7 +49,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @param sysRole
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void updateRole(SysRole sysRole) {
         sysRoleMapper.updateById(sysRole);
         //增加角色和权限资源的关系

@@ -79,12 +79,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         iRedisRepository.set(redisKey, user, Constant.USER_TOKEN_EXPIRE, TimeUnit.SECONDS);
         UserReqContextUtil.setRequestUser((SysUser) object);
         UserReqContextUtil.setToken(token);
-//            PlatformAuthenticationToken userToken = new PlatformAuthenticationToken((SysUser) object,token);
-//            try {
-//                SecurityUtils.getSubject().login(userToken);
-//            } catch (AuthenticationException e) {
-//                /**就直接返回给请求者.*/
-//            }
     }
 
     @Override
@@ -92,15 +86,14 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         if (!permissionIds.isEmpty()) {
             for (Long permissionId : permissionIds) {
                 //判断是否存在传入id是子id且没有父id传入
-                SysPermission sysPermission = sysPermissionMapper.selectById(Long.valueOf(permissionId));
-                if (sysPermission.getParentId() != -1 && !permissionIds.contains(sysPermission.getParentId().toString())) {
+                SysPermission sysPermission = sysPermissionMapper.selectById(permissionId);
+                if (sysPermission.getParentId() != -1 && !permissionIds.contains(sysPermission.getParentId())) {
                     return false;
                 }
             }
         }
         return true;
     }
-
 
     /**
      * 获取树列表
