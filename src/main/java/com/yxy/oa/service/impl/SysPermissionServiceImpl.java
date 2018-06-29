@@ -130,7 +130,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                     childPermissions.add(permission);
 //                    setChild(permission, permissions);
                 }
-                if (permission.getResourceType()==2){
+                if (permission.getResourceType() == 2) {
                     // 查询按钮的一级父菜单id
                     SysPermission sysPermission = sysPermissionMapper.selectById(permission.getParentId());
                     if (Objects.equals(sysPermission.getParentId(), curPermission.getId())) {
@@ -193,10 +193,10 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         }
     }
 
-    public void setChildDisable(List<RoleMenuBean> itemsMenu){
-        for (RoleMenuBean entity:itemsMenu) {
+    public void setChildDisable(List<RoleMenuBean> itemsMenu) {
+        for (RoleMenuBean entity : itemsMenu) {
             entity.setDisabled(true);
-            if(entity.getChildren()!=null){
+            if (entity.getChildren() != null) {
                 setChildDisable(entity.getChildren());
             }
         }

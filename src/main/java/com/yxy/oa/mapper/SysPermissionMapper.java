@@ -47,6 +47,7 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
 
     /**
      * 获取角色权限的授权菜单树数据
+     *
      * @return
      */
     List<RoleMenuBean> selectAllMenusTree();

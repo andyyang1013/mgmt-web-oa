@@ -11,13 +11,9 @@ import com.yxy.oa.service.ISysPermissionService;
 import com.yxy.oa.service.ISysRoleService;
 import com.yxy.oa.service.ISysUserService;
 import com.yxy.oa.util.CookieUtil;
-import com.yxy.oa.util.Md5Util;
 import com.yxy.oa.util.StringUtil;
 import com.yxy.oa.util.Toolkit;
-import com.yxy.oa.vo.Page;
 import com.yxy.oa.vo.SysUserVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +30,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sysUser")
-@Api(tags = {"系统权限表"}, description = "系统权限表服务")
 public class SysUserController extends BaseController {
 
 
@@ -60,7 +55,6 @@ public class SysUserController extends BaseController {
      * @return
      */
     @RequestMapping("/list")
-    @ApiOperation(value = "查询系统用户列表", notes = "根据条件查询系统用户列表", httpMethod = "POST", response = PageInfo.class)
     @RequiresPermissions("sysUser:list")
     public PageInfo<SysUser> getList(@RequestBody SysUserVo sysUser) {
         PageHelper.startPage(sysUser.getPage(), sysUser.getLimit());
@@ -76,7 +70,6 @@ public class SysUserController extends BaseController {
      * @param sysUser 系统用户对象
      */
     @RequestMapping("/insert")
-    @ApiOperation(value = "新增系统用户", notes = "新增系统用户，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:insert")
     public String insert(@RequestBody SysUser sysUser) {
         if (StringUtil.hasNull(sysUser.getAccount(), sysUser.getPassword(), sysUser.getRoleIds())) {
@@ -102,21 +95,12 @@ public class SysUserController extends BaseController {
         return SUCCESS;
     }
 
-    public static void main(String[] args) {
-        String s = Md5Util.md5Hex("123456");
-        System.out.println(s);
-        System.out.println(Toolkit.encrypt(s, "NRw3TkUowVu48HPyZ45tYg=="));
-        String member_123 = Md5Util.md5Hex("member_123");
-        System.out.println(Toolkit.encrypt(member_123, "NRw3TkUowVu48HPyZ45tYg=="));
-    }
-
     /**
      * 修改系统用户
      *
      * @param sysUser 系统用户对象
      */
     @RequestMapping("/update")
-    @ApiOperation(value = "更新系统用户", notes = "更新系统用户，需要主键Id，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:update")
     public String update(@RequestBody SysUser sysUser) {
         if (StringUtil.hasNull(sysUser.getRoleIds(), sysUser.getId())) {
@@ -147,7 +131,6 @@ public class SysUserController extends BaseController {
      * @param id 系统用户对象
      */
     @RequestMapping("/updatePass")
-    @ApiOperation(value = "更新系统用户", notes = "更新系统用户，需要主键Id，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:updatePass")
     public String updatePass(Long id, String passWord) {
         if (StringUtil.hasNull(id, passWord)) {
@@ -176,7 +159,6 @@ public class SysUserController extends BaseController {
      * @param disabled 启用禁用状态
      */
     @RequestMapping("/modifyType")
-    @ApiOperation(value = "启用禁用系统用户", notes = "启用禁用系统用户，需要主键Id，必填项不能为空", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:modifyType")
     public String modifyType(Long id, Integer disabled) {
         SysUser dbSysUser = sysUserService.selectById(id);
@@ -201,7 +183,6 @@ public class SysUserController extends BaseController {
      * @param id 主键id
      */
     @RequestMapping("/getById")
-    @ApiOperation(value = "获取系统用户对象", notes = "根据主键Id获取系统用户对象", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:update")
     public SysUser getById(Long id) {
         if (id == null) {
@@ -222,7 +203,6 @@ public class SysUserController extends BaseController {
      * @param id 主键id
      */
     @RequestMapping("/delete")
-    @ApiOperation(value = "删除系统用户对象", notes = "根据主键Id删除系统用户对象", httpMethod = "POST", response = String.class)
     @RequiresPermissions("sysUser:delete")
     public String deleteById(Long id) {
         if (id == null) {

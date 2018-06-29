@@ -53,6 +53,7 @@ public interface ISysUserService extends IService<SysUser> {
 
     /**
      * 插入用户和用户角色关系
+     *
      * @param sysUser
      */
     void insertSysUser(SysUser sysUser);

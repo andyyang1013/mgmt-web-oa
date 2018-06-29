@@ -16,8 +16,8 @@
         <result property="createUid" column="create_uid"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUid" column="update_uid"/>
-		<result property="createUserName" column="createUserName"/>
-		<result property="updateUserName" column="updateUserName"/>
+        <result property="createUserName" column="createUserName"/>
+        <result property="updateUserName" column="updateUserName"/>
     </resultMap>
 
     <sql id="columns">
@@ -74,20 +74,20 @@
         SELECT
         <include refid="columns_name"/>
         FROM t_sys_user u
-		left join t_sys_user cu on cu.id = u.create_uid
-		left join t_sys_user uu on uu.id = u.update_uid
+        left join t_sys_user cu on cu.id = u.create_uid
+        left join t_sys_user uu on uu.id = u.update_uid
         <where>
-			<if test="roleId != null and roleId != 0">
-				and exists (select 1 from t_sys_user_role ur where ur.role_id = #{roleId} and ur.user_id = u.id)
-			</if>
-			<if test="account != null and account != ''">
-				and u.account like concat('%',#{account},'%')
-			</if>
-			<if test="disabled != null">
-				and u.disabled = #{disabled}
-			</if>
-		</where>
-		order by u.update_time desc
+            <if test="roleId != null and roleId != 0">
+                and exists (select 1 from t_sys_user_role ur where ur.role_id = #{roleId} and ur.user_id = u.id)
+            </if>
+            <if test="account != null and account != ''">
+                and u.account like concat('%',#{account},'%')
+            </if>
+            <if test="disabled != null">
+                and u.disabled = #{disabled}
+            </if>
+        </where>
+        order by u.update_time desc
     </select>
 
     <select id="selectUserRoles" parameterType="com.yxy.oa.entity.SysUser" resultType="com.yxy.oa.entity.SysUserRole">

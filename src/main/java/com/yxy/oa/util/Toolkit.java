@@ -2,9 +2,7 @@ package com.yxy.oa.util;/**
  * Created by dell on 2017/11/13.
  */
 
-import com.yxy.oa.OaAdminApplication;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.SpringApplication;
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
@@ -25,15 +23,6 @@ public class Toolkit {
      * 密码加密格式  [password+salt]
      */
     private static final String ENCRYPT_FORMAT = "%s%s";
-
-    /**
-     * 生成Token
-     */
-    public static String makeToken() {
-        String token = new StringBuffer().append(new Random().nextInt(999999999)).append(System.currentTimeMillis()).toString();
-        return Md5Util.md5Hex(token);
-    }
-
 
     public static String getSha1(String str) {
         if (null == str || 0 == str.length()) {
@@ -157,7 +146,7 @@ public class Toolkit {
 
     public static void main(String[] args) {
         String salt = generateSalt();
-        String password = encrypt("123456",salt);
+        String password = encrypt("123456", salt);
         System.out.println("salt==" + salt + "password==" + password);
     }
 }

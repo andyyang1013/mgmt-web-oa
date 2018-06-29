@@ -9,9 +9,6 @@ import com.yxy.oa.repository.IRedisRepository;
 import com.yxy.oa.util.CookieUtil;
 import com.yxy.oa.util.JacksonUtil;
 import com.yxy.oa.vo.ResponseT;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,10 +67,10 @@ public class PlatformAccessControlFilter extends PathMatchingFilter {
         }
         // 前端预请求不拦截
         String requsetMethod = ((HttpServletRequest) request).getMethod();
-        if ("OPTIONS".equals(requsetMethod)){
+        if ("OPTIONS".equals(requsetMethod)) {
             return true;
         }
-        String userToken =((HttpServletRequest) request).getHeader(Constant.USER_TOKEN);
+        String userToken = ((HttpServletRequest) request).getHeader(Constant.USER_TOKEN);
         if (userToken == null) {
             /**后台没有获取到用户令牌时，清空用户登录状态*/
             UserReqContextUtil.set(null);

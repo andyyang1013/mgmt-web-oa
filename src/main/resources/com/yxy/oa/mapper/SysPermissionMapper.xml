@@ -17,10 +17,10 @@
         <result property="createUid" column="create_uid"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUid" column="update_uid"/>
-		<result property="icon" column="icon"/>
-		<result property="path" column="path"/>
-		<result property="component" column="component"/>
-		<result property="redirect" column="redirect"/>
+        <result property="icon" column="icon"/>
+        <result property="path" column="path"/>
+        <result property="component" column="component"/>
+        <result property="redirect" column="redirect"/>
     </resultMap>
 
     <sql id="columns">
@@ -44,33 +44,33 @@
 
     <!--查询列表，可以传分页参数-->
     <select id="getList" parameterType="com.yxy.oa.entity.SysPermission" resultMap="customResultMap">
-		SELECT
-		sp.id,
-		sp.disabled,
-		sp.resource_code,
-		sp.name,
-		sp.parent_id,
-		sp.resource_type,
-		sp.url,
-		sp.create_time,
-		sp.create_uid,
-		sp.update_time,
-		sp.update_uid,
-		(select count(*) from t_sys_permission p where p.parent_id = sp.id) childCount,
-		icon,
-		path,
-		component,
-		redirect
-		FROM t_sys_permission sp
-		<where>
-			<if test="resourceType != null">
-				and sp.resource_type = #{resourceType}
-			</if>
-			<if test="component != null and component != ''">
-				and sp.component != ''
-			</if>
-		</where>
-	</select>
+        SELECT
+        sp.id,
+        sp.disabled,
+        sp.resource_code,
+        sp.name,
+        sp.parent_id,
+        sp.resource_type,
+        sp.url,
+        sp.create_time,
+        sp.create_uid,
+        sp.update_time,
+        sp.update_uid,
+        (select count(*) from t_sys_permission p where p.parent_id = sp.id) childCount,
+        icon,
+        path,
+        component,
+        redirect
+        FROM t_sys_permission sp
+        <where>
+            <if test="resourceType != null">
+                and sp.resource_type = #{resourceType}
+            </if>
+            <if test="component != null and component != ''">
+                and sp.component != ''
+            </if>
+        </where>
+    </select>
 
     <!--根据角色Id查询权限列表-->
     <select id="getPermissionsByRoleId" parameterType="java.lang.Long" resultMap="customResultMap">
@@ -115,8 +115,8 @@
 		ORDER BY sp.id
 	</select>
 
-	<!--根据用户Id查询资源，只查询资源ID-->
-	<select id="getUserPermissionIds" parameterType="java.lang.Long" resultType="java.lang.String">
+    <!--根据用户Id查询资源，只查询资源ID-->
+    <select id="getUserPermissionIds" parameterType="java.lang.Long" resultType="java.lang.String">
 		SELECT
 		sp.resource_code
 		FROM t_sys_permission sp
@@ -129,7 +129,7 @@
 	</select>
 
 
-	<select id="selectAllMenusTree" resultType="com.yxy.oa.entity.RoleMenuBean">
+    <select id="selectAllMenusTree" resultType="com.yxy.oa.entity.RoleMenuBean">
 		select id, parent_id as parentId, name as label from t_sys_permission where disabled = 0 and id != 21
 	</select>
 </mapper>

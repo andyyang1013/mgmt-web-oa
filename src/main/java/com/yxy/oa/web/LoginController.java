@@ -1,7 +1,6 @@
 package com.yxy.oa.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.google.common.collect.Maps;
 import com.yxy.oa.Constant;
 import com.yxy.oa.entity.SysPermission;
 import com.yxy.oa.entity.SysUser;
@@ -67,13 +66,13 @@ public class LoginController extends BaseController {
             UsernamePasswordToken token = new UsernamePasswordToken(account, password);
             subject.login(token);
         } catch (UnknownAccountException e) {
-            throw new BizException(e.getMessage(),e);
+            throw new BizException(e.getMessage(), e);
         } catch (IncorrectCredentialsException e) {
-            throw new BizException(e.getMessage(),e);
+            throw new BizException(e.getMessage(), e);
         } catch (LockedAccountException e) {
-            throw new BizException(e.getMessage(),e);
+            throw new BizException(e.getMessage(), e);
         } catch (AuthenticationException e) {
-            throw new BizException(CodeMsg.account_password_error.getMsg(),e);
+            throw new BizException(CodeMsg.account_password_error.getMsg(), e);
         }
         /**记录最后登录时间*/
         Date lastLoginTime = new Date();
@@ -87,9 +86,9 @@ public class LoginController extends BaseController {
 //        CookieUtil.add(response, Constant.USER_TOKEN, sessionId, Constant.USER_TOKEN_EXPIRE);
         logger.info("登录成功：userToken=" + sessionId);
         //返回用户信息
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("token",sessionId);
-        map.put("account",loginUser.getAccount());
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", sessionId);
+        map.put("account", loginUser.getAccount());
         return map;
     }
 

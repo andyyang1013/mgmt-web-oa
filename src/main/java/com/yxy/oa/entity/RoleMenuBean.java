@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * 用于前端角色授权菜单数据渲染
- * */
+ */
 @Getter
 @Setter
-public class RoleMenuBean implements Serializable{
+public class RoleMenuBean implements Serializable {
     /**
      * 菜单Id
      */

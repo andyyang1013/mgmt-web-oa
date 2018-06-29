@@ -48,6 +48,7 @@ public class BaseController {
 
     /**
      * 获取当前用户
+     *
      * @return
      */
     public static SysUser getCurUserEntity() {
@@ -56,6 +57,7 @@ public class BaseController {
 
     /**
      * 获取当前用户id
+     *
      * @return
      */
     protected static Long getCurUserId() {

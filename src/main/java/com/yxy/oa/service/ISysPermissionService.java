@@ -44,6 +44,7 @@ public interface ISysPermissionService extends IService<SysPermission> {
 
     /**
      * 校验所有id是有父id存在或自己就是父id
+     *
      * @param permissionIds
      * @return
      */
@@ -53,6 +54,7 @@ public interface ISysPermissionService extends IService<SysPermission> {
 
     /**
      * 获取角色权限的授权菜单树
+     *
      * @return
      */
     List<RoleMenuBean> selectAllMenusTree();
