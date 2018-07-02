@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yxy.oa.mapper.SysDeptMapper">
+
+    <resultMap id="customResultMap" type="com.yxy.oa.entity.SysDept">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUid" column="create_uid"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUid" column="update_uid"/>
+    </resultMap>
+
+    <sql id="columns">
+		id,
+		name,
+		description,
+		create_time,
+		create_uid,
+		update_time,
+		update_uid
+	</sql>
+
+    <insert id="insertDept" parameterType="java.util.List">
+        insert into t_sys_department (id ,name ,description ,create_time ,create_uid ,update_time ,update_uid)
+        values
+		(#{id} , #{name} , #{description} , #{createTime} , #{createUid} , #{updateTime} , #{updateUid})
+    </insert>
+
+	<delete id="deleteDept" parameterType="java.lang.Long">
+		delete from t_sys_department where id = #{id}
+	</delete>
+
+	<update id="updateDept" parameterType="java.lang.Long">
+		update t_sys_department set name = #{name}, update_time = #{updateTime} , update_uid = #{updateUid}
+		<if test="description != null and description != ''">
+			, description = #{description}
+		</if>
+	</update>
+
+    <select id="selectDept" resultMap="customResultMap">
+		SELECT
+			<include refid="columns"></include>
+		FROM
+			t_sys_department
+		<where>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="id != null and id != 0">
+				and id = #{id}
+			</if>
+		</where>
+		order by update_time dest
+	</select>
+
+	<select id="existDeptName" parameterType="java.lang.String" resultType="Int">
+		select count(id) from t_sys_department where name = #{name}
+	</select>
+
+	<select id="existRoleByDept" parameterType="java.lang.Long" resultType="Int">
+		select count(id) from t_sys_role where dept_id = #{deptId}
+	</select>
+</mapper>
