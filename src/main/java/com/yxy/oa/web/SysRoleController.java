@@ -7,9 +7,9 @@ import com.yxy.oa.Constant;
 import com.yxy.oa.entity.SysRole;
 import com.yxy.oa.exception.BizException;
 import com.yxy.oa.exception.CodeMsg;
+import com.yxy.oa.service.ISysDeptService;
 import com.yxy.oa.service.ISysPermissionService;
 import com.yxy.oa.service.ISysRoleService;
-import com.yxy.oa.util.CookieUtil;
 import com.yxy.oa.util.StringUtil;
 import com.yxy.oa.util.Toolkit;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -42,6 +42,9 @@ public class SysRoleController extends BaseController {
     @Autowired
     private ISysPermissionService sysPermissionService;
 
+    @Autowired
+    private ISysDeptService sysDeptService;
+
     /**
      * 查询系统角色,带分页
      *
@@ -52,10 +55,7 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("sysRole:list")
     public PageInfo<SysRole> getList(@RequestBody SysRole sysRole) {
         PageHelper.startPage(sysRole.getPage(), sysRole.getLimit());
-        List<SysRole> roles = sysRoleService.selectList(new EntityWrapper<>(sysRole));
-        for (SysRole role : roles) {
-            role.setPermissions(sysPermissionService.getPermissionsByRoleId(role.getId()));
-        }
+        List<SysRole> roles = sysRoleService.selectList(sysRole);
         PageInfo<SysRole> pageInfo = new PageInfo<>(roles);
         return pageInfo;
     }
@@ -130,9 +130,10 @@ public class SysRoleController extends BaseController {
         dbSysRole.setUpdateUid(getCurUserId());
         dbSysRole.setUpdateTime(Toolkit.getCurDate());
         dbSysRole.setPermissionIds(sysRole.getPermissionIds());
+        dbSysRole.setDeptId(sysRole.getDeptId());
         sysRoleService.updateRole(dbSysRole);
         //权限发生改变时更新当前登录用户权限缓存
-        sysPermissionService.updateLoginUserPermission(getCurUserId(), CookieUtil.getCookieValue(request, Constant.USER_TOKEN));
+        sysPermissionService.updateLoginUserPermission(getCurUserId(), request.getHeader(Constant.USER_TOKEN));
         return SUCCESS;
     }
 
@@ -199,6 +200,9 @@ public class SysRoleController extends BaseController {
         //判断只能是超级管理员才能修改角色
         if (getCurUserEntity().getSystemType() != 1) {
             throw new BizException(CodeMsg.user_no_permission);
+        }
+        if (sysRoleService.existUserByRole(id)) {
+            throw new BizException(CodeMsg.role_user_exist);
         }
         sysRoleService.deleteByRole(sysRole);
         //权限发生改变时更新当前登录用户权限缓存

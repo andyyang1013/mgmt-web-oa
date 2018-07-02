@@ -13,18 +13,19 @@
         <result property="createUid" column="create_uid"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUid" column="update_uid"/>
+		<result property="deptName" column="deptName"/>
     </resultMap>
 
     <sql id="columns">
-		id,
-		disabled,
-		role_code,
-		role_name,
-		description,
-		create_time,
-		create_uid,
-		update_time,
-		update_uid
+		r.id,
+		r.disabled,
+		r.role_code,
+		r.role_name,
+		r.description,
+		r.create_time,
+		r.create_uid,
+		r.update_time,
+		r.update_uid
 	</sql>
 
     <!--批量插入角色和权限的关系表-->
@@ -73,6 +74,27 @@
 		select permission_id from t_sys_role_permission rp
 		left join t_sys_permission p on rp.permission_id = p.id
 		where p.resource_type = 2 and rp.role_id =  #{roleId}
+	</select>
+
+	<select id="existUserByRole" parameterType="java.lang.Long" resultType="Int">
+		select count(id) from t_sys_user_role where role_id = #{roleId}
+	</select>
+
+	<select id="selectList" resultMap="customResultMap">
+		SELECT
+		<include refid="columns"></include>,tp.name as deptName
+		FROM
+		t_sys_role r
+		left join t_sys_department tp on tp.id = r.dept_id
+		<where>
+			<if test="roleName != null and roleName != ''">
+				and role_name like concat(concat('%',#{roleName}),'%')
+			</if>
+			<if test="id != null and id != 0">
+				and id = #{id}
+			</if>
+		</where>
+		order by update_time desc
 	</select>
 </mapper>
 

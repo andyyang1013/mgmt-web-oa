@@ -32,7 +32,6 @@ public class SysDeptController extends BaseController {
 
     @Autowired
     private ISysDeptService sysDeptService;
-
     /**
      * 查询系统部门,带分页
      *
@@ -43,7 +42,7 @@ public class SysDeptController extends BaseController {
     @RequiresPermissions("sysDept:list")
     public PageInfo<SysDept> getList(@RequestBody SysDept sysDept) {
         PageHelper.startPage(sysDept.getPage(), sysDept.getLimit());
-        List<SysDept> depts = sysDeptService.selectList(new EntityWrapper<>(sysDept));
+        List<SysDept> depts = sysDeptService.selectList(sysDept);
         PageInfo<SysDept> pageInfo = new PageInfo<>(depts);
         return pageInfo;
     }
@@ -56,7 +55,7 @@ public class SysDeptController extends BaseController {
      */
     @RequestMapping("/listNoPage")
     public List<SysDept> getListNoPage(@RequestBody SysDept sysDept) {
-        return sysDeptService.selectList(new EntityWrapper<>(sysDept));
+        return sysDeptService.selectList(sysDept);
     }
 
 

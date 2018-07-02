@@ -52,8 +52,11 @@ public interface ISysRoleService extends IService<SysRole> {
 
     /**
      * 查询角色对应的所有按钮权限ID
-     *
      * @param roleId
-     */
+     * */
     List<Long> getPermissionIdsByRoleId(Long roleId);
+
+    boolean existUserByRole(Long roleId);
+
+    List<SysRole> selectList(SysRole sysRole);
 }

@@ -1,7 +1,10 @@
 package com.yxy.oa.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 import com.yxy.oa.entity.SysDept;
+
+import java.util.List;
 
 /**
  * 系统部门表 服务类
@@ -36,4 +39,6 @@ public interface ISysDeptService extends IService<SysDept> {
      * @return
      */
     boolean existRoleByDept(Long deptId);
+
+    List<SysDept> selectList(SysDept sysDept);
 }

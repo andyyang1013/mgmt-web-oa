@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 系统部门表 服务实现类
  */
@@ -53,5 +55,10 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public boolean existRoleByDept(Long deptId){
         int count = sysDeptMapper.existRoleByDept(deptId);
         return count > 0;
+    }
+
+    @Override
+    public List<SysDept> selectList(SysDept sysDept) {
+        return sysDeptMapper.selectList(sysDept);
     }
 }

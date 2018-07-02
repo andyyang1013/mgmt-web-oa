@@ -39,20 +39,20 @@
 		</if>
 	</update>
 
-    <select id="selectDept" resultMap="customResultMap">
+    <select id="selectList" resultMap="customResultMap">
 		SELECT
 			<include refid="columns"></include>
 		FROM
 			t_sys_department
 		<where>
 			<if test="name != null and name != ''">
-				and name = #{name}
+				and name like concat(concat('%',#{name}),'%')
 			</if>
 			<if test="id != null and id != 0">
 				and id = #{id}
 			</if>
 		</where>
-		order by update_time dest
+		order by update_time desc
 	</select>
 
 	<select id="existDeptName" parameterType="java.lang.String" resultType="Int">

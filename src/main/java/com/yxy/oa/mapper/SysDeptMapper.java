@@ -1,8 +1,11 @@
 package com.yxy.oa.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.yxy.oa.entity.SysDept;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 系统部门表 Mapper 接口
@@ -32,4 +35,6 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
     int existDeptName(String deptName);
 
     int existRoleByDept(Long deptId);
+
+    List<SysDept> selectList(SysDept sysDept);
 }

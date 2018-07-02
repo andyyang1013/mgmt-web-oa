@@ -69,7 +69,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void deleteByRole(SysRole sysRole) {
         sysRoleMapper.deletePermRelationsByRoleId(sysRole.getId());
         sysRoleMapper.deleteUsersByRoleId(sysRole.getId());
@@ -101,5 +101,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     public List<Long> getPermissionIdsByRoleId(Long roleId) {
         return sysRoleMapper.getPermissionIdsByRoleId(roleId);
+    }
+
+    @Override
+    public boolean existUserByRole(Long roleId) {
+        int count = sysRoleMapper.existUserByRole(roleId);
+        return count>0;
+    }
+
+    @Override
+    public List<SysRole> selectList(SysRole sysRole) {
+        return sysRoleMapper.selectList(sysRole);
     }
 }
