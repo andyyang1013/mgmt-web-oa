@@ -49,8 +49,9 @@ public enum CodeMsg {
     user_phone_error("手机号格式错误", "biz_027"),
     user_idNumberState_error("身份证号验证状态错误", "biz_028"),
     user_bind_over_max("绑定的用户数超过最大限制", "biz_029"),
-    role_name_exist("用户组已存在", "biz_030");
-
+    role_name_exist("角色名已存在", "biz_030"),
+    role_user_exist("角色下有用户存在", "biz_031"),
+    dept_role_exist("部门下有角色存在", "biz_032"); 
 
     //2、属性
     private String code; //返回码
