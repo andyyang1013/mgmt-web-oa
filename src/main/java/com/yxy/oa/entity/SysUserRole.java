@@ -26,6 +26,7 @@ public class SysUserRole extends Model<SysUserRole> {
      */
     @TableField("user_id")
     private Long userId;
+
     /**
      * 角色ID
      */
