@@ -67,9 +67,17 @@ public class SysRole extends Model<SysRole> {
     @TableField("update_uid")
     private Long updateUid;
 
+    /**
+     * 部门id
+     */
+    @TableField("dept_id")
+    private Long deptId;
+
     private transient List<SysPermission> permissions;
 
     private transient List<Long> permissionIds;
+
+    private transient String deptName;
 
     // 当前页码
     private transient int page;
