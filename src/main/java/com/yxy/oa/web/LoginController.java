@@ -1,5 +1,6 @@
 package com.yxy.oa.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.yxy.oa.Constant;
 import com.yxy.oa.entity.SysPermission;
@@ -88,7 +89,6 @@ public class LoginController extends BaseController {
         //返回用户信息
         Map<String, Object> map = new HashMap<>();
         map.put("token", sessionId);
-        map.put("account", loginUser.getAccount());
         return map;
     }
 

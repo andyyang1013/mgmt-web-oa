@@ -1,10 +1,12 @@
 package com.yxy.oa.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yxy.oa.entity.RoleMenuBean;
 import com.yxy.oa.entity.SysPermission;
+import com.yxy.oa.entity.SysUser;
 import com.yxy.oa.exception.BizException;
 import com.yxy.oa.exception.CodeMsg;
 import com.yxy.oa.service.ISysPermissionService;
@@ -32,7 +34,6 @@ public class SysPermissionController extends BaseController {
      * 日志记录
      */
     private Logger logger = LoggerFactory.getLogger(SysPermissionController.class);
-
 
     @Autowired
     private ISysPermissionService sysPermissionService;
@@ -145,6 +146,10 @@ public class SysPermissionController extends BaseController {
         Map<String, Object> map = new HashMap();
         map.put("menuList", menuList);
         map.put("permissions", permissions);
+        SysUser sysUser = getCurUserEntity();
+        JSONObject loginInfo = new JSONObject()
+                .fluentPut("account",sysUser.getAccount());
+        map.put("loginInfo", loginInfo);
         return map;
     }
 

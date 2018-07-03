@@ -44,7 +44,21 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     void deleteRoleRelationsByUserId(Long userId);
 
     /**
-     * 删除角色小所有的用户
+     * 批量删除系统用户和角色关系
+     *
+     * @param userIds
+     */
+    void deleteRoleRelationsByUserIds(List<Long> userIds);
+
+    /**
+     * 批量删除系统用户
+     *
+     * @param userIds
+     */
+    int deleteUserById(List<Long> userIds);
+
+    /**
+     * 删除角色下所有的用户
      *
      * @param roleId
      */

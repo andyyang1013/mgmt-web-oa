@@ -199,23 +199,15 @@ public class SysUserController extends BaseController {
     /**
      * 删除系统用户
      *
-     * @param id 主键id
+     * @param ids 主键id集合
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sysUser:delete")
-    public String deleteById(Long id) {
-        if (id == null) {
+    public String deleteUserById(@RequestBody  List<Long> ids) {
+        if (ids.isEmpty()) {
             throw new BizException(CodeMsg.id_param_blank);
         }
-        SysUser sysUser = sysUserService.selectById(id);
-        if (sysUser == null) {
-            throw new BizException(CodeMsg.record_not_exist);
-        }
-        //判断是否为超级管理员
-        if (sysUser.getSystemType() == 1) {
-            throw new BizException(CodeMsg.user_no_permission);
-        }
-        sysUserService.deleteByUser(sysUser);
+        sysUserService.deleteUserById(ids);
         return SUCCESS;
     }
 

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.IdWorker;
 import com.yxy.oa.entity.SysUser;
 import com.yxy.oa.entity.SysUserRole;
+import com.yxy.oa.exception.BizException;
+import com.yxy.oa.exception.CodeMsg;
 import com.yxy.oa.mapper.SysUserMapper;
 import com.yxy.oa.service.ISysUserService;
 import com.yxy.oa.vo.SysUserVo;
@@ -75,10 +77,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByUser(SysUser sysUser) {
-        sysUserMapper.deleteRoleRelationsByUserId(sysUser.getId());
-        sysUserMapper.deleteById(sysUser.getId());
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public void deleteUserById(List<Long> userIds) {
+        sysUserMapper.deleteRoleRelationsByUserIds(userIds);
+        int count = sysUserMapper.deleteUserById(userIds);
+        if (count == 0) {
+            throw new BizException(CodeMsg.record_not_exist);
+        }
     }
 
     private void insertUserRole(SysUser user) {
@@ -94,8 +99,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 sysUserRole.setUpdateTime(user.getUpdateTime());
                 sysUserMapper.insertRoleRelation(sysUserRole);
             }
-
         }
-
     }
 }

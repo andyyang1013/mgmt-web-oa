@@ -44,7 +44,7 @@ public interface ISysUserService extends IService<SysUser> {
     void deleteRoleRelationsByUserId(Long userId);
 
     /**
-     * 删除角色小所有的用户
+     * 删除角色下所有的用户
      *
      * @param roleId
      */
@@ -75,9 +75,8 @@ public interface ISysUserService extends IService<SysUser> {
     void updateUser(SysUser dbSysUser);
 
     /**
-     * 删除用户
-     *
-     * @param sysUser
+     * 批量删除用户
+     * @param userIds
      */
-    void deleteByUser(SysUser sysUser);
+    void deleteUserById(List<Long> userIds);
 }

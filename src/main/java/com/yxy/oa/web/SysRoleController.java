@@ -62,13 +62,12 @@ public class SysRoleController extends BaseController {
 
     /**
      * 查询系统角色
-     *
      * @param sysRole 系统角色对象
      * @return
      */
     @RequestMapping("/listNoPage")
     public List<SysRole> getListNoPage(@RequestBody SysRole sysRole) {
-        return sysRoleService.selectList(new EntityWrapper<>(sysRole));
+        return sysRoleService.selectList(sysRole);
     }
 
 

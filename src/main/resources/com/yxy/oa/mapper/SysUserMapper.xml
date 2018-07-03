@@ -39,8 +39,6 @@
     <sql id="columns_name">
         u.id,
         u.account,
-        u.pwd,
-        u.salt,
         u.disabled,
         u.system_type,
         u.locked,
@@ -77,6 +75,7 @@
         left join t_sys_user cu on cu.id = u.create_uid
         left join t_sys_user uu on uu.id = u.update_uid
         <where>
+            and u.system_type != 1
             <if test="roleId != null and roleId != 0">
                 and exists (select 1 from t_sys_user_role ur where ur.role_id = #{roleId} and ur.user_id = u.id)
             </if>
@@ -117,7 +116,6 @@
         account = #{account}
     </select>
 
-
     <delete id="deleteRoleRelationsByUserId" parameterType="java.lang.Long">
 		DELETE FROM t_sys_user_role WHERE user_id = #{userId}
 	</delete>
@@ -125,5 +123,20 @@
     <delete id="deleteUsersByRoleId" parameterType="java.lang.Long">
 		DELETE FROM t_sys_user WHERE id in (select user_id FROM t_sys_user_role WHERE role_id = #{roleId})
 	</delete>
+
+    <delete id="deleteRoleRelationsByUserIds" parameterType="java.util.List">
+        DELETE FROM t_sys_user_role WHERE user_id in
+        <foreach collection="list" open="(" close=")" separator="," item="userId">
+            #{userId}
+        </foreach>
+        and user_id in (select id from t_sys_user where system_type != 1)
+    </delete>
+
+    <delete id="deleteUserById" parameterType="java.util.List">
+        DELETE FROM t_sys_user WHERE system_type != 1 and id in
+        <foreach collection="list" open="(" close=")" separator="," item="userId">
+            #{userId}
+        </foreach>
+    </delete>
 </mapper>
 

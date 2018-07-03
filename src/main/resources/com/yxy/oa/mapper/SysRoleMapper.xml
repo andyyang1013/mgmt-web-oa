@@ -13,6 +13,7 @@
         <result property="createUid" column="create_uid"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUid" column="update_uid"/>
+		<result property="deptId" column="dept_id"/>
 		<result property="deptName" column="deptName"/>
     </resultMap>
 
@@ -25,7 +26,8 @@
 		r.create_time,
 		r.create_uid,
 		r.update_time,
-		r.update_uid
+		r.update_uid,
+		r.dept_id
 	</sql>
 
     <!--批量插入角色和权限的关系表-->
@@ -87,14 +89,15 @@
 		t_sys_role r
 		left join t_sys_department tp on tp.id = r.dept_id
 		<where>
+			and r.system_type != 1
 			<if test="roleName != null and roleName != ''">
-				and role_name like concat(concat('%',#{roleName}),'%')
+				and r.role_name like concat(concat('%',#{roleName}),'%')
 			</if>
 			<if test="id != null and id != 0">
-				and id = #{id}
+				and r.id = #{id}
 			</if>
 		</where>
-		order by update_time desc
+		order by r.update_time desc
 	</select>
 </mapper>
 
