@@ -186,3 +186,47 @@ INSERT INTO `t_sys_user_role` (`id`, `user_id`, `role_id`, `create_time`, `creat
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+-- 导出表  oa.t_sys_user_info 的数据
+CREATE TABLE `t_sys_user_info` (
+  `id` bigint(20) unsigned NOT NULL COMMENT '主键ID',
+  `nick_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '用户昵称',
+  `sex` tinyint(1) DEFAULT '0' COMMENT '性别,0 保密1 男 2 女 默认为0',
+  `image` varchar(255) DEFAULT NULL COMMENT '头像url地址',
+  `true_name` varchar(50) DEFAULT NULL COMMENT '真实姓名',
+  `id_number` varchar(20) DEFAULT NULL COMMENT '身份证号',
+  `id_number_state` tinyint(1) DEFAULT '0' COMMENT '身份证号验证状态,0 未验证 1已验证 默认 0',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `mobile` varchar(255) DEFAULT NULL COMMENT '手机号',
+  `create_time` datetime(3) DEFAULT NULL COMMENT '创建时间',
+  `create_uid` bigint(20) DEFAULT NULL COMMENT '创建用户Id',
+  `update_time` datetime(3) DEFAULT NULL COMMENT '更新时间',
+  `update_uid` bigint(20) DEFAULT NULL COMMENT '更新用户id',
+  `address` varchar(255) DEFAULT NULL COMMENT '住址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户扩展信息表';
+
+-- ----------------------------
+-- Records of t_sys_user_info
+-- ----------------------------
+INSERT INTO `t_sys_user_info` VALUES ('1009352238272745473', null, '0', null, null, null, '0', null, null, '2018-06-20 16:28:21.081', '1', '2018-06-20 16:28:21.081', '1', null);
+
+-- 导出表  oa.t_sys_department 的数据
+DROP TABLE IF EXISTS `t_sys_department`;
+CREATE TABLE `t_sys_department` (
+  `id` bigint(20) NOT NULL COMMENT '部门id',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '部门名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '部门描述',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_uid` bigint(20) DEFAULT NULL COMMENT '创建用户Id',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_uid` bigint(20) DEFAULT NULL COMMENT '更新用户id',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_sys_department
+-- ----------------------------
+INSERT INTO `t_sys_department` VALUES ('1013670789316284417', '运营部', '运营部门，职责：。。。\n', '2018-07-02 14:28:44', '968051929257107459', '2018-07-02 14:39:21', '968051929257107459');
+INSERT INTO `t_sys_department` VALUES ('1013683868984827906', '综合部', '综合部，职务：。。。。', '2018-07-02 15:20:42', '968051929257107458', '2018-07-02 15:21:13', '968051929257107458');
+INSERT INTO `t_sys_department` VALUES ('1013706473099935745', 'testa', 'testa', '2018-07-02 16:50:32', '968051929257107458', '2018-07-02 16:50:32', '968051929257107458');
